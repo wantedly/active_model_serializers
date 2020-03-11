@@ -48,8 +48,6 @@ module ActiveModel
         key ||= object.respond_to?(:name) ? object.name && object.name.underscore : nil
         # 4. key may be nil for empty collection and no serializer option
         key &&= key.pluralize
-        # 5. fail if the key cannot be determined
-        key || fail(ArgumentError, 'Cannot infer root key from collection type. Please specify the root or each_serializer option, or render a JSON String')
       end
       # rubocop:enable Metrics/CyclomaticComplexity
 
