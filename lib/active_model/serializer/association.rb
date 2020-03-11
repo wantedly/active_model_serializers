@@ -49,13 +49,24 @@ module ActiveModel
       end
 
       # @api private
+      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/PerceivedComplexity
       def serializable_hash(adapter_options, adapter_instance)
         association_serializer = lazy_association.serializer
         return virtual_value if virtual_value
         association_object = association_serializer && association_serializer.object
         return unless association_object
 
-        serialization = association_serializer.serializable_hash(adapter_options, {}, adapter_instance)
+        # Add this clause to filter fields for associations.
+        # Because attribute adapter doesn't provide fields selection of nested associations.
+        if adapter_options[:include] && adapter_options[:include].is_a?(Hash) && adapter_options[:include][key] && adapter_options[:include][key].is_a?(Hash)
+          fields = [adapter_options[:include][key][:fields] || adapter_options[:include][key][:only] || []].flatten.compact
+          options = fields.present? ? { fields: fields } : {}
+        else
+          options = {}
+        end
+        serialization = association_serializer.serializable_hash(adapter_options, options, adapter_instance)
 
         if polymorphic? && serialization
           polymorphic_type = association_object.class.name.underscore
@@ -64,6 +75,9 @@ module ActiveModel
 
         serialization
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/PerceivedComplexity
 
       private
 

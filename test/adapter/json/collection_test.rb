@@ -100,6 +100,51 @@ module ActiveModelSerializers
 
           assert_equal(expected, actual)
         end
+
+        def test_fields_with_associations_include_option
+          actual = ActiveModelSerializers::SerializableResource.new(
+            [@first_post, @second_post], adapter: :json, fields: %w(id), include: :author
+          ).as_json
+
+          expected = { posts: [{ id: 1, author: { id: 1, name: 'Steve K.' } }, { id: 2, author: { id: 1, name: 'Steve K.' } }] }
+          assert_equal(expected, actual)
+        end
+
+        def test_fields_with_associations_include_option_with_sub_fields
+          actual = ActiveModelSerializers::SerializableResource.new(
+            [@first_post, @second_post], adapter: :json, fields: %w(id author.id), include: { author: { fields: %i(name) } }
+          ).as_json
+
+          expected = { posts: [{ id: 1, author: { name: 'Steve K.' } }, { id: 2, author: { name: 'Steve K.' } }] }
+          assert_equal(expected, actual)
+        end
+
+        def test_fields_with_associations_include_option_with_sub_field
+          actual = ActiveModelSerializers::SerializableResource.new(
+            [@first_post, @second_post], adapter: :json, fields: %w(id author.id), include: { author: { fields: :name } }
+          ).as_json
+
+          expected = { posts: [{ id: 1, author: { name: 'Steve K.' } }, { id: 2, author: { name: 'Steve K.' } }] }
+          assert_equal(expected, actual)
+        end
+
+        def test_fields_with_associations_include_option_with_sub_only
+          actual = ActiveModelSerializers::SerializableResource.new(
+            [@first_post, @second_post], adapter: :json, fields: %w(id author.id), include: { author: { only: :name } }
+          ).as_json
+
+          expected = { posts: [{ id: 1, author: { name: 'Steve K.' } }, { id: 2, author: { name: 'Steve K.' } }] }
+          assert_equal(expected, actual)
+        end
+
+        def test_fields_with_associations_include_option_with_sub_nothing
+          actual = ActiveModelSerializers::SerializableResource.new(
+            [@first_post, @second_post], adapter: :json, fields: %w(id author.id), include: { author: { test: :test } }
+          ).as_json
+
+          expected = { posts: [{ id: 1, author: { id: 1, name: 'Steve K.' } }, { id: 2, author: { id: 1, name: 'Steve K.' } }] }
+          assert_equal(expected, actual)
+        end
       end
     end
   end
