@@ -95,16 +95,12 @@ module ActiveModel
         resource = []
         resource.define_singleton_method(:name) { nil }
         serializer = collection_serializer.new(resource)
-        assert_raise ArgumentError do
-          serializer.json_key
-        end
+        assert_equal '', serializer.json_key
       end
 
       def test_json_key_with_resource_without_name_and_no_serializers
         serializer = collection_serializer.new([])
-        assert_raise ArgumentError do
-          serializer.json_key
-        end
+        assert_equal '', serializer.json_key
       end
 
       def test_json_key_with_empty_resources_with_serializer
