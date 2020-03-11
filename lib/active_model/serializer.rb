@@ -147,6 +147,7 @@ module ActiveModel
     config.jsonapi_include_toplevel_object = false
     config.jsonapi_use_foreign_key_on_belongs_to_relationship = false
     config.include_data_default = true
+    config.mixes_action_controller = true
 
     # For configuring how serializers are found.
     # This should be an array of procs.
