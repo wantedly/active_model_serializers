@@ -13,7 +13,10 @@ module ActiveModelSerializers
       ActiveModel::Serializer.serializers_cache.clear
     end
 
-    # We sometimes do not want this mix
+    # We sometimes do not want this mix, for example in application.rb, you can have:
+    # config.before_initialize do
+    #   ActiveModelSerializers.config.mixes_action_controller = false
+    # end
     initializer 'active_model_serializers.action_controller' do
       if ActiveModelSerializers.config.mixes_action_controller
         ActiveSupport.on_load(:action_controller) do
