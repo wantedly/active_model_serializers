@@ -41,6 +41,25 @@ class RailtieTest < ActiveSupport::TestCase
     end
   end
 
+  class WithRailsRequiredFirstWithoutMix < RailtieTest
+    class ActiveModelSerializers
+      include ActiveSupport::Configurable
+    end
+
+    setup do
+      ActiveModelSerializers.config.mixes_action_controller = false
+      require 'rails'
+      require 'active_model_serializers'
+    end
+
+    test 'does not mix ActionController::Serialization into ActionController::Base' do
+      assert ActionController.const_defined?(:Serialization),
+        'ActionController::Serialization should not be defined'
+      refute ::ActionController::Base.included_modules.include?(::ActionController::Serialization),
+        'ActionController::Serialization should not be included'
+    end
+  end
+
   class WithoutRailsRequiredFirst < RailtieTest
     setup do
       require 'active_model_serializers'
