@@ -4,12 +4,7 @@
 
 ## DEFINE VARIABLES
 @minimum_coverage = ENV.fetch('COVERAGE_MINIMUM') {
-  case (defined?(RUBY_ENGINE) && RUBY_ENGINE) || "ruby"
-  when 'jruby', 'rbx'
-    96.0
-  else
-    98.1
-  end
+  95
 }.to_f.round(2)
 # rubocop:disable Style/DoubleNegation
 ENV['FULL_BUILD'] ||= ENV['CI']
