@@ -48,6 +48,7 @@ module ActiveModel
         key ||= object.respond_to?(:name) ? object.name && object.name.underscore : nil
         # 4. key may be nil for empty collection and no serializer option
         key &&= key.pluralize
+        key || ''
       end
       # rubocop:enable Metrics/CyclomaticComplexity
 
