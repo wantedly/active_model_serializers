@@ -145,6 +145,35 @@ module ActiveModelSerializers
           expected = { posts: [{ id: 1, author: { id: 1, name: 'Steve K.' } }, { id: 2, author: { id: 1, name: 'Steve K.' } }] }
           assert_equal(expected, actual)
         end
+
+        def test_fields_with_nested_associations_include_option_with_sub_fields
+          # Setup
+          @first_post.comments = [Comment.new(id: 3, author: Author.new(id: 4, name: 'John L.'))]
+          ActionController::Base.cache_store.clear
+
+          # Test
+          actual = ActiveModelSerializers::SerializableResource.new(
+            [@first_post, @second_post], adapter: :json, fields: %w(id author.id), include: {
+              author: {
+                fields: [:name]
+              },
+              comments: {
+                fields: [:id],
+                author: {
+                  fields: [:id]
+                }
+              }
+            }
+          ).as_json
+
+          expected = {
+            posts: [
+              { id: 1, author: { name: 'Steve K.' }, comments: [{ id: 3, author: { id: 4 } }] },
+              { id: 2, author: { name: 'Steve K.' }, comments: [] }
+            ]
+          }
+          assert_equal(expected, actual)
+        end
       end
     end
   end
