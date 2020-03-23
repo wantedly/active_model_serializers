@@ -49,9 +49,6 @@ module ActiveModel
       end
 
       # @api private
-      # rubocop:disable Metrics/CyclomaticComplexity
-      # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/PerceivedComplexity
       def serializable_hash(adapter_options, adapter_instance)
         association_serializer = lazy_association.serializer
         return virtual_value if virtual_value
@@ -67,9 +64,6 @@ module ActiveModel
 
         serialization
       end
-      # rubocop:enable Metrics/CyclomaticComplexity
-      # rubocop:enable Metrics/AbcSize
-      # rubocop:enable Metrics/PerceivedComplexity
 
       private
 

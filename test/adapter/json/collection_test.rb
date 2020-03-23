@@ -155,12 +155,12 @@ module ActiveModelSerializers
           actual = ActiveModelSerializers::SerializableResource.new(
             [@first_post, @second_post], adapter: :json, fields: %w(id author.id), include: {
               author: {
-                fields: [:name],
+                fields: [:name]
               },
               comments: {
                 fields: [:id],
                 author: {
-                  fields: [:id],
+                  fields: [:id]
                 }
               }
             }
@@ -169,7 +169,7 @@ module ActiveModelSerializers
           expected = {
             posts: [
               { id: 1, author: { name: 'Steve K.' }, comments: [{ id: 3, author: { id: 4 } }] },
-              { id: 2, author: { name: 'Steve K.' }, comments: [] },
+              { id: 2, author: { name: 'Steve K.' }, comments: [] }
             ]
           }
           assert_equal(expected, actual)

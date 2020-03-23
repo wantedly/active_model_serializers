@@ -370,14 +370,12 @@ module ActiveModel
         options[:fields] = fieldset.fields_for(json_key)
       end
       # [Note] Add this clause to provide selective fields for associations in json adapter.
-      if !options[:fields]
+      unless options[:fields]
         h = options[:include_directive].to_hash
         fields = []
-        fields += h[:fields].keys if h.has_key?(:fields)
-        fields += h[:only].keys   if h.has_key?(:only)
-        if fields.size > 0
-          options[:fields] = fields
-        end
+        fields += h[:fields].keys if h.key?(:fields)
+        fields += h[:only].keys   if h.key?(:only)
+        options[:fields] = fields unless fields.empty?
       end
 
       resource = attributes_hash(adapter_options, options, adapter_instance)
