@@ -48,6 +48,10 @@ module ActiveModel
         key ||= object.respond_to?(:name) ? object.name && object.name.underscore : nil
         # 4. key may be nil for empty collection and no serializer option
         key &&= key.pluralize
+        if raise_cannot_infer_root_key_error?
+          # 5. fail if the key cannot be determined
+          key || fail(CannotInferRootKeyError, 'Cannot infer root key from collection type. Please specify the root or each_serializer option, or render a JSON String')
+        end
         key || ''
       end
       # rubocop:enable Metrics/CyclomaticComplexity
@@ -59,11 +63,17 @@ module ActiveModel
           object.respond_to?(:size)
       end
 
+      class CannotInferRootKeyError < StandardError; end
+
       protected
 
       attr_reader :serializers, :options
 
       private
+
+      def raise_cannot_infer_root_key_error?
+        ActiveModelSerializers.config.raise_cannot_infer_root_key_error
+      end
 
       def serializers_from_resources
         serializer_context_class = options.fetch(:serializer_context_class, ActiveModel::Serializer)
