@@ -33,7 +33,7 @@ module ActiveModel
       # But, if a dev defines a custom `json_key` method with an explicit value,
       # we have no simple way to know that it is safe to call that instance method.
       # (which is really a class property at this point, anyhow).
-      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       # Disabling cop since it's good to highlight the complexity of this method by
       # including all the logic right here.
       def json_key
@@ -54,7 +54,7 @@ module ActiveModel
         end
         key || ''
       end
-      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       def paginated?
         ActiveModelSerializers.config.jsonapi_pagination_links_enabled &&
