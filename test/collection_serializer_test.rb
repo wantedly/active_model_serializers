@@ -94,27 +94,39 @@ module ActiveModel
       end
 
       def test_json_key_with_resource_with_nil_name_and_no_serializers
+        previous_raise_cannot_infer_root_key_error = ActiveModelSerializers.config.raise_cannot_infer_root_key_error
+        ActiveModelSerializers.config.raise_cannot_infer_root_key_error = true
         resource = []
         resource.define_singleton_method(:name) { nil }
         serializer = collection_serializer.new(resource)
         assert_raise ActiveModel::Serializer::CollectionSerializer::CannotInferRootKeyError do
           serializer.json_key
         end
+      ensure
+        ActiveModelSerializers.config.raise_cannot_infer_root_key_error = previous_raise_cannot_infer_root_key_error
       end
 
       def test_json_key_with_resource_without_name_and_no_serializers
+        previous_raise_cannot_infer_root_key_error = ActiveModelSerializers.config.raise_cannot_infer_root_key_error
+        ActiveModelSerializers.config.raise_cannot_infer_root_key_error = true
         serializer = collection_serializer.new([])
         assert_raise ActiveModel::Serializer::CollectionSerializer::CannotInferRootKeyError do
           serializer.json_key
         end
+      ensure
+        ActiveModelSerializers.config.raise_cannot_infer_root_key_error = previous_raise_cannot_infer_root_key_error
       end
 
       def test_json_key_with_empty_resources_with_non_type_serializer
+        previous_raise_cannot_infer_root_key_error = ActiveModelSerializers.config.raise_cannot_infer_root_key_error
+        ActiveModelSerializers.config.raise_cannot_infer_root_key_error = true
         resource = []
         serializer = collection_serializer.new(resource, serializer: NonTypeSerializer)
         assert_raise ActiveModel::Serializer::CollectionSerializer::CannotInferRootKeyError do
           serializer.json_key
         end
+      ensure
+        ActiveModelSerializers.config.raise_cannot_infer_root_key_error = previous_raise_cannot_infer_root_key_error
       end
 
       def test_json_key_with_empty_resources_with_non_type_serializer_when_raise_cannot_infer_root_key_error_is_false

@@ -147,7 +147,7 @@ module ActiveModel
     config.jsonapi_use_foreign_key_on_belongs_to_relationship = false
     config.include_data_default = true
     # Raise ActiveModel::Serializer::CollectionSerializer::CannotInferRootKeyError when cannot infer root key from collection type
-    config.raise_cannot_infer_root_key_error = true
+    config.raise_cannot_infer_root_key_error = false
     config.mixes_action_controller = true
 
     # For configuring how serializers are found.
