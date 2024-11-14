@@ -7,18 +7,20 @@ on: [push, pull_request]
 jobs:
   test:
     name: "Testing"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
         include:
           # Recent Rubies and Rails
+          - ruby-version: '3.2'
+            rails-version: '7.1'
           - ruby-version: '3.1'
-            rails-version: '7.0'
+            rails-version: '7.1'
           - ruby-version: '3.0'
-            rails-version: '7.0'
+            rails-version: '7.1'
           - ruby-version: '2.7'
-            rails-version: '7.0'
+            rails-version: '7.1'
           - ruby-version: '2.6'
             rails-version: '6.1'
           - ruby-version: '2.6'
